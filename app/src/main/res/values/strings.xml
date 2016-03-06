@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Spotify Streamer</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="highest_rated">Highest Rated</string>
+    <string name="api_key" translatable="false">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</string>
+    <string name="movie_poster_description">Movie Poster</string>
+    <string name="movie_title">Title</string>
+    <string name="movie_release_date">Release Date</string>
+    <string name="movie_rating">Rating</string>
+    <string name="movie_synopsis">Synopsis</string>
+    <string-array name="sort_by_parameter">
+        <item>popularity.desc</item>
+        <item>vote_average.desc</item>
+    </string-array>
+    <string name="rating_format">%1$.2f / %2$.2f</string>
+    <string name="check_internet_connection">Please check your internet connection</string>
+    <string name="retry">Retry</string>
+</resources>
