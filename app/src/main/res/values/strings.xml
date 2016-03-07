@@ -10,7 +10,7 @@
     <string name="movie_synopsis">Synopsis</string>
     <string-array name="sort_by_parameter">
         <item>popularity.desc</item>
-        <item>vote_average.desc</item>
+        <item>vote_count.desc</item>
     </string-array>
     <string name="rating_format">%1$.2f / %2$.2f</string>
     <string name="check_internet_connection">Please check your internet connection</string>

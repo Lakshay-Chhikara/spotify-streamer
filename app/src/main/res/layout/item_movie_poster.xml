@@ -3,5 +3,6 @@
     android:id="@+id/movie_poster"
     android:layout_width="@dimen/movie_poster_width"
     android:layout_height="@dimen/movie_poster_height"
+    android:contentDescription="@string/movie_poster_description"
     android:scaleType="centerCrop" />
     <!--android:adjustViewBounds="true"-->

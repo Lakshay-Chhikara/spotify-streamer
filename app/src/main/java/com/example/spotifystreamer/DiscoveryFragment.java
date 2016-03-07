@@ -55,7 +55,7 @@ public class DiscoveryFragment extends Fragment {
     private static final String KEY_MOVIE_ARRAY_LIST = "key_movie_list";
 
     private static final int MOST_POPULAR = 0;
-    private static final int HIGHEST_RATED = 0;
+    private static final int HIGHEST_RATED = 1;
 
     public DiscoveryFragment() {
         setHasOptionsMenu(true);
@@ -210,9 +210,6 @@ public class DiscoveryFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             movieAdapter.notifyDataSetChanged();
-            if (!movieList.isEmpty()) {
-                mListener.onMovieSelected(movieList.get(0), true);
-            }
             //movieAdapter.notifyItemRangeChanged(0, movieList.size());
         }
     }
