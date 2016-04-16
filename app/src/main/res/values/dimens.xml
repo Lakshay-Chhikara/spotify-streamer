@@ -8,5 +8,9 @@
     <dimen name="date_text_size">20sp</dimen>
     <dimen name="rating_text_size">18sp</dimen>
     <dimen name="synopsis_text_size">20sp</dimen>
+    <dimen name="trailers_text_size">20sp</dimen>
+    <dimen name="reviews_text_size">20sp</dimen>
     <dimen name="margin_left">7dp</dimen>
+    <dimen name="margin_trailer_item">7dp</dimen>
+    <dimen name="margin_review_item">7dp</dimen>
 </resources>

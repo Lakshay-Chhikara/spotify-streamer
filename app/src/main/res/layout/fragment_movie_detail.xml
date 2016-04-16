@@ -2,6 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingEnd="@dimen/activity_horizontal_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -16,11 +18,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/add_to_favourites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/btn_star_big_off"
+                android:layout_alignParentRight="true"
+                android:contentDescription="@string/movie_poster_description" />
+
             <TextView
                 android:id="@+id/movie_original_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/movie_title"
+                android:layout_toLeftOf="@id/add_to_favourites"
                 android:textSize="@dimen/title_text_size" />
 
             <ImageView
@@ -61,6 +72,36 @@
                 android:layout_below="@id/movie_poster"
                 android:hint="@string/movie_synopsis"
                 android:textSize="@dimen/synopsis_text_size" />
+
+            <TextView
+                android:id="@+id/text_view_trailers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_below="@id/movie_synopsis"
+                android:text="@string/trailers"
+                android:textSize="@dimen/trailers_text_size" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/trailers_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_trailers"/>
+
+            <TextView
+                android:id="@+id/text_view_reviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_below="@id/trailers_recycler_view"
+                android:text="@string/reviews"
+                android:textSize="@dimen/reviews_text_size" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/reviews_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_reviews"/>
         </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
 </ScrollView>

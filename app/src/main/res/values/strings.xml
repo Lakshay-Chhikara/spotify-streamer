@@ -2,17 +2,28 @@
     <string name="app_name">Spotify Streamer</string>
     <string name="most_popular">Most Popular</string>
     <string name="highest_rated">Highest Rated</string>
+    <string name="favorites">Favorites</string>
+    <string name="action_share">Share</string>
     <string name="api_key" translatable="false">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</string>
+    <string name="additional_information_required" translatable="false">reviews,trailers</string>
     <string name="movie_poster_description">Movie Poster</string>
     <string name="movie_title">Title</string>
     <string name="movie_release_date">Release Date</string>
     <string name="movie_rating">Rating</string>
     <string name="movie_synopsis">Synopsis</string>
+    <string name="trailers">Trailers</string>
+    <string name="trailer_description">Trailer Thumbnail</string>
+    <string name="reviews">Reviews</string>
+    <string name="author">Author</string>
+    <string name="content">Content</string>
+    <string name="popularity.descending" translatable="false">popularity.desc</string>
+    <string name="vote_count.descending" translatable="false">vote_count.desc</string>
     <string-array name="sort_by_parameter">
-        <item>popularity.desc</item>
-        <item>vote_count.desc</item>
+        <item>@string/popularity.descending</item>
+        <item>@string/vote_count.descending</item>
     </string-array>
     <string name="rating_format">%1$.2f / %2$.2f</string>
     <string name="check_internet_connection">Please check your internet connection</string>
     <string name="retry">Retry</string>
+    <string name="no_app_found_to_show_trailer">No App Found To Show Trailer</string>
 </resources>

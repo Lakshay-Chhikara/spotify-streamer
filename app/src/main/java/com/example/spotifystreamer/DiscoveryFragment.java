@@ -1,12 +1,16 @@
 package com.example.spotifystreamer;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,7 +39,7 @@ import java.util.ArrayList;
  * {@link DiscoveryFragment.OnMovieSelectedListener} interface
  * to handle interaction events.
  */
-public class DiscoveryFragment extends Fragment {
+public class DiscoveryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private RecyclerView mRecyclerView;
     private ArrayList<Movie> movieList;
     private MovieAdapter movieAdapter;
@@ -44,18 +48,14 @@ public class DiscoveryFragment extends Fragment {
 
     private static final int SPAN_COUNT = 2;
 
-    private static final String SCHEME = "http";
-    private static final String AUTHORITY = "api.themoviedb.org";
-    private static final String PATH_1 = "3";
-    private static final String PATH_2 = "discover";
-    private static final String PATH_3 = "movie";
-    private static final String SORT_BY_QUERY_PARAMETER = "sort_by";
-    private static final String API_KEY_QUERY_PARAMETER = "api_key";
-
     private static final String KEY_MOVIE_ARRAY_LIST = "key_movie_list";
+    private static final String KEY_SHOWING_FAVOURITES = "key_showing_favourites";
 
     private static final int MOST_POPULAR = 0;
     private static final int HIGHEST_RATED = 1;
+
+    private static final int FAVOURITE_MOVIES_LOADER = 0;
+    private boolean showingFavourites = false;
 
     public DiscoveryFragment() {
         setHasOptionsMenu(true);
@@ -76,6 +76,7 @@ public class DiscoveryFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
+            showingFavourites = savedInstanceState.getBoolean(KEY_SHOWING_FAVOURITES);
             movieList = savedInstanceState.getParcelableArrayList(KEY_MOVIE_ARRAY_LIST);
             movieAdapter = new MovieAdapter(getActivity(), movieList, mListener);
             //movieAdapter.notifyItemRangeInserted(0, movieList.size());
@@ -102,7 +103,7 @@ public class DiscoveryFragment extends Fragment {
         movieAdapter = new MovieAdapter(getActivity(), movieList, mListener);
         mRecyclerView.setAdapter(movieAdapter);
 
-        if (movieList.isEmpty()) {
+        if (movieList.isEmpty() && !showingFavourites) {
             new FetchMovieData().execute(
                     getResources().getStringArray(R.array.sort_by_parameter)[MOST_POPULAR]);
         }
@@ -113,6 +114,7 @@ public class DiscoveryFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(KEY_MOVIE_ARRAY_LIST, movieList);
+        outState.putBoolean(KEY_SHOWING_FAVOURITES, showingFavourites);
         super.onSaveInstanceState(outState);
     }
 
@@ -129,11 +131,18 @@ public class DiscoveryFragment extends Fragment {
         String[] sortBy = getResources().getStringArray(R.array.sort_by_parameter);
         switch (itemId) {
             case R.id.most_popular:
+                showingFavourites = false;
                 new FetchMovieData().execute(sortBy[MOST_POPULAR]);
                 return true;
 
             case R.id.highest_rated:
+                showingFavourites = false;
                 new FetchMovieData().execute(sortBy[HIGHEST_RATED]);
+                return true;
+
+            case R.id.favourites:
+                showingFavourites = true;
+                getLoaderManager().initLoader(FAVOURITE_MOVIES_LOADER, null, DiscoveryFragment.this);
                 return true;
         }
 
@@ -149,13 +158,13 @@ public class DiscoveryFragment extends Fragment {
     private class FetchMovieData extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(final String... params) {
-            Uri uri = new Uri.Builder().scheme(SCHEME)
-                    .authority(AUTHORITY)
-                    .appendPath(PATH_1)
-                    .appendPath(PATH_2)
-                    .appendPath(PATH_3)
-                    .appendQueryParameter(SORT_BY_QUERY_PARAMETER, params[0])
-                    .appendQueryParameter(API_KEY_QUERY_PARAMETER, getString(R.string.api_key))
+            Uri uri = new Uri.Builder().scheme("http")
+                    .authority("api.themoviedb.org")
+                    .appendPath("3")
+                    .appendPath("discover")
+                    .appendPath("movie")
+                    .appendQueryParameter("sort_by", params[0])
+                    .appendQueryParameter("api_key", getString(R.string.api_key))
                     .build();
             String response = null;
             try {
@@ -216,5 +225,40 @@ public class DiscoveryFragment extends Fragment {
 
     public interface OnMovieSelectedListener {
         void onMovieSelected(Movie movie, boolean skipForOnePaneLayout);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getContext(),
+                FavouriteContract.FavouriteEntry.buildFavouriteMoviesUri(),
+                new String[] {FavouriteContract.FavouriteEntry._ID,
+                        FavouriteContract.FavouriteEntry.COLUMN_NAME,
+                        FavouriteContract.FavouriteEntry.COLUMN_POSTER_URI,
+                        FavouriteContract.FavouriteEntry.COLUMN_SYNOPSIS,
+                        FavouriteContract.FavouriteEntry.COLUMN_RELEASE_DATE,
+                        FavouriteContract.FavouriteEntry.COLUMN_RATING},
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (!showingFavourites) {
+            return;
+        }
+
+        movieList.clear();
+        if (data.moveToFirst()) {
+            do {
+                movieList.add(new Movie(data.getInt(0), data.getString(1), data.getString(2),
+                        data.getString(3), data.getString(4), data.getDouble(5)));
+            } while (data.moveToNext());
+        }
+        movieAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
     }
 }

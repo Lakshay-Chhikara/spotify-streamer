@@ -18,10 +18,12 @@ public class Movie implements Parcelable {
     // For Poster Size
     private static final String PATH_3_FOR_MOVIE_POSTER = "w185";
 
+    private int id;
     private String title, posterUrl, synopsis, releaseDate;
     private double rating;
 
     public Movie(JSONObject movie) throws JSONException {
+        this.id = movie.getInt("id");
         this.title = movie.getString("original_title");
         this.posterUrl = new Uri.Builder().scheme(SCHEME_FOR_MOVIE_POSTER)
                 .authority(AUTHORITY_FOR_MOVIE_POSTER)
@@ -33,6 +35,16 @@ public class Movie implements Parcelable {
         this.releaseDate = movie.getString("release_date");
     }
 
+    public Movie(int id, String title, String posterUrl, String synopsis, String releaseDate,
+                 double rating) {
+        this.id = id;
+        this.title = title;
+        this.posterUrl = posterUrl;
+        this.synopsis = synopsis;
+        this.releaseDate = releaseDate;
+        this.rating = rating;
+    }
+
     private Movie(Parcel in) {
         this.title = in.readString();
         this.posterUrl = in.readString();
@@ -41,7 +53,11 @@ public class Movie implements Parcelable {
         this.rating = in.readDouble();
     }
 
-    public String getPosterUrl() {
+    public int getId() {
+        return id;
+    }
+
+    public String getPosterUri() {
         return posterUrl;
     }
 

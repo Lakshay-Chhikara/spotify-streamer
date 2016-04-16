@@ -39,7 +39,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(MovieViewHolder holder, final int position) {
         Glide.with(mContext)
-                .load(movieList.get(position).getPosterUrl())
+                .load(movieList.get(position).getPosterUri())
                 .into(holder.moviePoster);
         holder.moviePoster.setOnClickListener(new View.OnClickListener() {
             @Override
